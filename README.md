@@ -218,6 +218,7 @@ It’s important to note that this dataset is synthetic, so these patterns may n
 │   ├── 02_cleaning.sql
 |   ├── 03_features.sql
 |   ├── 04_ctes_windows.sql
+|   ├── 05_expansion_analysis.sql
 ├── data/
 │   ├── themepark.db
 ├── figures/
