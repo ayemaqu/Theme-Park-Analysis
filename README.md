@@ -130,6 +130,86 @@ Like any real-world dataset, this project involved gaps and quirks that shaped t
 
 By documenting cleaning choices, acknowledging gaps, and noting where the data may not reflect reality, I aimed to keep this analysis transparent. Any real business decision should validate these findings with additional data (e.g., staff logs, survey design checks, cost data) before implementation.
 
+
+---
+
+## Expanded Analysis (Individual Contribution)
+
+This section describes the additional work I completed after the group project was finished. My goal with this expansion was to move beyond basic aggregations and create a more accurate and meaningful understanding of guest behavior and value using SQL.
+
+### Improvements I Implemented
+
+- Added a new metric to calculate **spend per person** instead of only total spend  
+- Improved the repeat guest feature by creating **guest segments based on visit frequency** (one-time, occasional, frequent)  
+- Combined segmentation with spending behavior to analyze how guest frequency relates to individual value  
+
+---
+
+### Detailed Implementation
+
+#### 1. Spend Per Person Metric
+
+In the original project, spending was primarily analyzed using total spend per visit. However, this does not account for differences in group size, which can distort how we interpret guest value.
+
+To address this, I created a new metric:
+- Calculated as: `spend_cents_clean / party_size`
+- Used `NULLIF(party_size, 0)` to avoid division errors
+- Converted values from cents to dollars for readability
+
+This allowed me to standardize spending at the **individual level**, making comparisons across visits more meaningful.
+
+---
+
+#### 2. Guest Segmentation (Feature Improvement)
+
+The original project used a basic repeat guest flag, which only distinguished between repeat and non-repeat visitors.
+
+I improved this by:
+- Counting total visits per `guest_id`
+- Creating a segmentation using a CASE statement:
+  - `one_time` → 1 visit  
+  - `occasional` → 2–3 visits  
+  - `frequent` → 4+ visits  
+
+This approach captures **different levels of engagement**, rather than treating all repeat guests the same.
+
+---
+
+#### 3. Connecting Segmentation to Spending Behavior
+
+After creating the guest segments, I joined them back to the `fact_visits` table and calculated:
+
+- Average spend per person per segment  
+
+This allowed me to directly compare how guest frequency relates to individual spending behavior.
+
+---
+
+### Why These Changes Matter
+
+The original analysis provided a strong overview of park activity, but it had two main limitations:
+
+1. **Total spend alone can be misleading**  
+   Larger groups naturally generate higher total spend, which does not necessarily reflect higher individual value. By introducing spend per person, I was able to normalize this and make fair comparisons across different types of visits.
+
+2. **Repeat vs non-repeat is too broad**  
+   Not all repeat guests behave the same. Someone who visits twice is very different from someone who visits five or more times. By segmenting guests based on visit frequency, the analysis becomes more nuanced and actionable.
+
+Overall, these changes improve how well the analysis reflects **true customer value and behavior**, which is more useful for both marketing and operational decisions.
+
+---
+
+### Example New Insight
+
+From this expanded analysis, I found that **occasional guests spend more per person than frequent guests**, with occasional guests averaging around $99.79 per person and frequent guests averaging around $86.83.
+
+This suggests that while frequent guests visit more often, they may spend less per visit on an individual basis. In contrast, occasional guests may treat visits as higher-value experiences, leading to higher per-person spending.
+
+It’s important to note that this dataset is synthetic, so these patterns may not fully reflect real-world behavior. However, the analysis demonstrates how adding better metrics and segmentation can reveal insights that would not be visible from total spend alone.
+
+---
+
+
 ## Folder Structure 
 ```text
 .
